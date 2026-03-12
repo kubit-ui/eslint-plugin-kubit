@@ -1,5 +1,12 @@
 # @kubit-ui-web/eslint-plugin-kubit
 
+## 0.0.2
+
+### Fixes
+
+- Lazy-load ESLint configs to support OxLint `jsPlugins` without ESLint installed
+- Configs are only resolved when accessed, allowing OxLint to load only the custom rules
+
 ## 0.0.1
 
 ### Initial Release
