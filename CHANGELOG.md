@@ -1,10 +1,10 @@
-# eslint-plugin-kubit
+# @kubit-ui-web/eslint-plugin-kubit
 
 ## 0.0.1
 
 ### Initial Release
 
-Full migration from `eslint-config-kubit` to a standalone ESLint plugin.
+Full migration from `eslint-config-kubit` to `@kubit-ui-web/eslint-plugin-kubit`.
 
 ### Custom Rules
 

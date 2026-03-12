@@ -1,6 +1,6 @@
 ## Contributing
 
-We welcome contributions to **eslint-plugin-kubit**! This project is open source and we encourage community participation through **forks and pull requests**. All contributions must be made through the fork workflow - we do not accept direct pushes to the main repository.
+We welcome contributions to **@kubit-ui-web/eslint-plugin-kubit**! This project is open source and we encourage community participation through **forks and pull requests**. All contributions must be made through the fork workflow - we do not accept direct pushes to the main repository.
 
 ### Why Fork-Based Contributing?
 
@@ -122,13 +122,13 @@ The version bump is automatically detected from your branch name:
 
 ### Branch Naming Patterns
 
-| Branch Pattern          | Version Bump | Example                    | Description                  |
-| ----------------------- | ------------ | -------------------------- | ---------------------------- |
-| `feat/` or `feature/`   | **MINOR**    | `feat/new-rule`            | New ESLint rules             |
-| `fix/` or `bugfix/`     | **PATCH**    | `fix/rule-false-positive`  | Bug fixes in rules           |
-| `break/` or `breaking/` | **MAJOR**    | `break/remove-deprecated`  | Breaking rule changes        |
-| `hotfix/`               | **PATCH**    | `hotfix/critical-bug`      | Urgent fixes                 |
-| `chore/`                | **PATCH**    | `chore/update-deps`        | Maintenance tasks            |
+| Branch Pattern          | Version Bump | Example                   | Description           |
+| ----------------------- | ------------ | ------------------------- | --------------------- |
+| `feat/` or `feature/`   | **MINOR**    | `feat/new-rule`           | New ESLint rules      |
+| `fix/` or `bugfix/`     | **PATCH**    | `fix/rule-false-positive` | Bug fixes in rules    |
+| `break/` or `breaking/` | **MAJOR**    | `break/remove-deprecated` | Breaking rule changes |
+| `hotfix/`               | **PATCH**    | `hotfix/critical-bug`     | Urgent fixes          |
+| `chore/`                | **PATCH**    | `chore/update-deps`       | Maintenance tasks     |
 
 ### Requirements
 
@@ -159,7 +159,7 @@ pnpm lint
 # Test locally in another project
 pnpm link --global
 cd /path/to/test-project
-pnpm link --global eslint-plugin-kubit
+pnpm link --global @kubit-ui-web/eslint-plugin-kubit
 ```
 
 ### Testing Your Changes
@@ -188,4 +188,4 @@ By participating in this project, you agree to abide by our [Code of Conduct](./
 
 ### License
 
-By contributing to eslint-plugin-kubit, you agree that your contributions will be licensed under the [Apache 2.0 License](./LICENSE).
+By contributing to @kubit-ui-web/eslint-plugin-kubit, you agree that your contributions will be licensed under the [Apache 2.0 License](./LICENSE).

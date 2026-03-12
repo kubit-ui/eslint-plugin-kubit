@@ -1,12 +1,12 @@
 # Migration Guide
 
-## Migrating from `eslint-config-kubit` to `eslint-plugin-kubit`
+## Migrating from `eslint-config-kubit` to `@kubit-ui-web/eslint-plugin-kubit`
 
-This guide explains how to migrate from the monolithic `eslint-config-kubit` (function-based config) to `eslint-plugin-kubit` (proper ESLint plugin with composable configs).
+This guide explains how to migrate from the monolithic `eslint-config-kubit` (function-based config) to `@kubit-ui-web/eslint-plugin-kubit` (proper ESLint plugin with composable configs).
 
 ### Why Migrate?
 
-| `eslint-config-kubit` (old)           | `eslint-plugin-kubit` (new)                  |
+| `eslint-config-kubit` (old)           | `@kubit-ui-web/eslint-plugin-kubit` (new)    |
 | ------------------------------------- | -------------------------------------------- |
 | Opaque function that hides everything | Transparent, composable flat configs         |
 | All-or-nothing configuration          | Cherry-pick: `base`, `typescript`, `react`   |
@@ -24,7 +24,7 @@ All ESLint plugins come **bundled** — one install, zero extra setup:
 pnpm remove eslint-config-kubit
 
 # Install the new plugin (all plugins included automatically)
-pnpm add -D eslint-plugin-kubit
+pnpm add -D @kubit-ui-web/eslint-plugin-kubit
 ```
 
 ### Step 2: Update your `eslint.config.js`
@@ -65,7 +65,7 @@ module.exports = eslintFlatConfig({
 ```js
 const eslint = require("@eslint/js");
 const tseslint = require("typescript-eslint");
-const kubit = require("eslint-plugin-kubit");
+const kubit = require("@kubit-ui-web/eslint-plugin-kubit");
 const path = require("path");
 
 module.exports = [
@@ -105,10 +105,10 @@ module.exports = [
 
 ### Step 3: Rule name mapping
 
-| Old rule name (eslint-config-kubit)                 | New rule name (eslint-plugin-kubit) |
-| --------------------------------------------------- | ----------------------------------- |
-| `@kubit-ui-web/no-index-import/no-index-import`     | `kubit/no-index-import`             |
-| `no-relative-import-paths/no-relative-import-paths` | `kubit/no-relative-import-paths`    |
+| Old rule name (eslint-config-kubit)                 | New rule name (@kubit-ui-web/eslint-plugin-kubit) |
+| --------------------------------------------------- | ------------------------------------------------- |
+| `@kubit-ui-web/no-index-import/no-index-import`     | `kubit/no-index-import`                           |
+| `no-relative-import-paths/no-relative-import-paths` | `kubit/no-relative-import-paths`                  |
 
 ### Step 4: Use React config (if needed)
 
@@ -116,7 +116,7 @@ If your project uses React, simply use `recommended-react` instead of `recommend
 No extra installs needed — React, a11y, and hooks plugins are already bundled:
 
 ```js
-const kubit = require("eslint-plugin-kubit");
+const kubit = require("@kubit-ui-web/eslint-plugin-kubit");
 
 module.exports = [
   // Use recommended-react instead of recommended
@@ -150,7 +150,7 @@ If you're also migrating to Biome, you can now remove from ESLint all the rules 
 Your `eslint.config.js` becomes minimal — only rules Biome doesn't cover:
 
 ```js
-const kubit = require("eslint-plugin-kubit");
+const kubit = require("@kubit-ui-web/eslint-plugin-kubit");
 
 module.exports = [
   kubit.configs.recommended,

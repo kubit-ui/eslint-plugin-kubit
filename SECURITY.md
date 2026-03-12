@@ -2,21 +2,21 @@
 
 ## Supported Versions
 
-We actively support the following versions of eslint-plugin-kubit:
+We actively support the following versions of @kubit-ui-web/eslint-plugin-kubit:
 
-| Version | Supported          |
-| ------- | ------------------ |
-| 1.x.x   | :white_check_mark: Active support  |
+| Version | Supported                         |
+| ------- | --------------------------------- |
+| 1.x.x   | :white_check_mark: Active support |
 
 ## Reporting a Vulnerability
 
-We take security vulnerabilities seriously. If you discover a security vulnerability in eslint-plugin-kubit, please report it to us responsibly.
+We take security vulnerabilities seriously. If you discover a security vulnerability in @kubit-ui-web/eslint-plugin-kubit, please report it to us responsibly.
 
 ### How to Report
 
 1. **Email**: Send details to `security@kubit-ui.com`
 2. **GitHub**: Create a private security advisory on GitHub
-3. **Subject**: Include "Security Vulnerability - eslint-plugin-kubit" in the subject line
+3. **Subject**: Include "Security Vulnerability - @kubit-ui-web/eslint-plugin-kubit" in the subject line
 
 ### Required Information
 
@@ -36,7 +36,7 @@ Please include the following details in your report:
 
 ### Security Best Practices
 
-When using eslint-plugin-kubit:
+When using @kubit-ui-web/eslint-plugin-kubit:
 
 1. **Keep Updated**: Always use the latest version
 2. **Review Rules**: Understand the ESLint rules being applied

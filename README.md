@@ -2,8 +2,8 @@
 
 <div align="center">
 
-[![npm version](https://img.shields.io/npm/v/eslint-plugin-kubit.svg)](https://www.npmjs.com/package/eslint-plugin-kubit)
-[![npm downloads](https://img.shields.io/npm/dm/eslint-plugin-kubit.svg)](https://www.npmjs.com/package/eslint-plugin-kubit)
+[![npm version](https://img.shields.io/npm/v/@kubit-ui-web/eslint-plugin-kubit.svg)](https://www.npmjs.com/package/@kubit-ui-web/eslint-plugin-kubit)
+[![npm downloads](https://img.shields.io/npm/dm/@kubit-ui-web/eslint-plugin-kubit.svg)](https://www.npmjs.com/package/@kubit-ui-web/eslint-plugin-kubit)
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 **A lightweight, composable ESLint plugin for TypeScript and React projects**
@@ -19,9 +19,9 @@ Compatible with Biome, OxLint, and ESLint flat config.
 
 ## Why this plugin?
 
-`eslint-plugin-kubit` replaces `eslint-config-kubit` with a better architecture:
+`@kubit-ui-web/eslint-plugin-kubit` replaces `eslint-config-kubit` with a better architecture:
 
-| `eslint-config-kubit` (old)           | `eslint-plugin-kubit` (new)                        |
+| `eslint-config-kubit` (old)           | `@kubit-ui-web/eslint-plugin-kubit` (new)          |
 | ------------------------------------- | -------------------------------------------------- |
 | Opaque function that hides everything | Transparent, composable flat configs               |
 | ~15 plugins bundled as dependencies   | All plugins bundled — one install, zero setup      |
@@ -40,10 +40,10 @@ All ESLint plugins come **bundled** — one install, zero extra setup:
 
 ```bash
 # Using pnpm (recommended)
-pnpm add -D eslint eslint-plugin-kubit
+pnpm add -D eslint @kubit-ui-web/eslint-plugin-kubit
 
 # Using npm
-npm install --save-dev eslint eslint-plugin-kubit
+npm install --save-dev eslint @kubit-ui-web/eslint-plugin-kubit
 ```
 
 That's it. All plugins (TypeScript, React, a11y, Prettier, Perfectionist, Jest, etc.) are included as direct dependencies and installed automatically.
@@ -56,7 +56,7 @@ That's it. All plugins (TypeScript, React, a11y, Prettier, Perfectionist, Jest, 
 // eslint.config.js
 const eslint = require("@eslint/js");
 const tseslint = require("typescript-eslint");
-const kubit = require("eslint-plugin-kubit");
+const kubit = require("@kubit-ui-web/eslint-plugin-kubit");
 
 module.exports = [
   eslint.configs.recommended,
@@ -71,7 +71,7 @@ module.exports = [
 // eslint.config.js
 const eslint = require("@eslint/js");
 const tseslint = require("typescript-eslint");
-const kubit = require("eslint-plugin-kubit");
+const kubit = require("@kubit-ui-web/eslint-plugin-kubit");
 
 module.exports = [
   eslint.configs.recommended,
@@ -86,7 +86,7 @@ For projects using Biome or OxLint for standard rules:
 
 ```js
 // eslint.config.js
-const kubit = require("eslint-plugin-kubit");
+const kubit = require("@kubit-ui-web/eslint-plugin-kubit");
 
 module.exports = [kubit.configs["kubit-rules"]];
 ```
@@ -110,7 +110,7 @@ module.exports = [kubit.configs["kubit-rules"]];
 You can mix and match individual configs:
 
 ```js
-const kubit = require("eslint-plugin-kubit");
+const kubit = require("@kubit-ui-web/eslint-plugin-kubit");
 
 module.exports = [
   // Only TypeScript + kubit custom rules (no base JS rules)
@@ -124,7 +124,7 @@ module.exports = [
 All rules are visible and overridable:
 
 ```js
-const kubit = require("eslint-plugin-kubit");
+const kubit = require("@kubit-ui-web/eslint-plugin-kubit");
 
 module.exports = [
   kubit.configs.recommended,
@@ -187,7 +187,7 @@ Use the `biome` config — only the rules Biome doesn't cover + kubit custom rul
 
 ```js
 // eslint.config.js
-const kubit = require("eslint-plugin-kubit");
+const kubit = require("@kubit-ui-web/eslint-plugin-kubit");
 
 module.exports = [kubit.configs.biome];
 ```
@@ -202,7 +202,7 @@ Use the `oxlint` config — even smaller because OxLint covers more rules (~10 r
 
 ```js
 // eslint.config.js
-const kubit = require("eslint-plugin-kubit");
+const kubit = require("@kubit-ui-web/eslint-plugin-kubit");
 
 module.exports = [kubit.configs.oxlint];
 ```
@@ -234,7 +234,7 @@ See the full [Migration Guide](MIGRATION.md) for step-by-step instructions.
 ```diff
 - const eslintFlatConfig = require("eslint-config-kubit");
 - module.exports = eslintFlatConfig({ isReact: false, tsConfigPath: "..." });
-+ const kubit = require("eslint-plugin-kubit");
++ const kubit = require("@kubit-ui-web/eslint-plugin-kubit");
 + module.exports = [kubit.configs.recommended];
 ```
 

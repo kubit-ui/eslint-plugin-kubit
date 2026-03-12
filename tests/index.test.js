@@ -1,9 +1,9 @@
 const plugin = require("../lib/index");
 
-describe("eslint-plugin-kubit", () => {
+describe("@kubit-ui-web/eslint-plugin-kubit", () => {
   it("should export plugin meta information", () => {
     expect(plugin.meta).toBeDefined();
-    expect(plugin.meta.name).toBe("eslint-plugin-kubit");
+    expect(plugin.meta.name).toBe("@kubit-ui-web/eslint-plugin-kubit");
     expect(plugin.meta.version).toBeDefined();
   });
 
