@@ -1,0 +1,34 @@
+{
+  "plugins": ["import", "jest"],
+  "rules": {
+    "curly": ["error", "all"],
+    "no-cond-assign": ["error", "always"],
+    "no-constant-condition": "error",
+    "no-debugger": "error",
+    "no-useless-escape": "error",
+    "no-case-declarations": "warn",
+    "no-extra-boolean-cast": "error",
+    "no-func-assign": "error",
+    "no-inner-declarations": "error",
+    "no-use-before-define": "off",
+    "no-undef": "error",
+    "no-unreachable": "error",
+
+    "eqeqeq": ["error", "always"],
+
+    "complexity": ["error", { "max": 5 }],
+    "no-else-return": "error",
+    "no-eval": "error",
+    "no-var": "error",
+    "no-console": "error",
+    "no-alert": "error",
+    "no-duplicate-imports": "error",
+    "no-param-reassign": "error",
+    "prefer-const": "error",
+    "no-unneeded-ternary": "error",
+
+    "import/no-cycle": "error",
+
+    "jest/no-focused-tests": "error"
+  }
+}

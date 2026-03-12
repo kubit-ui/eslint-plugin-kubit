@@ -1,0 +1,42 @@
+# eslint-plugin-kubit
+
+## 0.0.1
+
+### Initial Release
+
+Full migration from `eslint-config-kubit` to a standalone ESLint plugin.
+
+### Custom Rules
+
+- `kubit/no-index-import` — Disallow imports from index/barrel files
+- `kubit/no-relative-import-paths` — Enforce absolute import paths (auto-fixable)
+
+### ESLint Configs
+
+- `recommended` — Base + TypeScript + kubit custom rules (no React)
+- `recommended-react` — Recommended + React + JSX a11y rules
+- `base` — General JS/ES6 rules (prettier, import, jest, perfectionist)
+- `typescript` — TypeScript-specific rules
+- `react` — React + JSX accessibility rules
+- `compat` — Browser compatibility rules
+- `kubit-rules` — Only the 2 custom kubit rules
+- `biome` — Rules Biome doesn't cover + kubit custom rules
+- `oxlint` — Rules OxLint doesn't cover + kubit custom rules
+
+### OxLint Configs (JSON)
+
+- `oxlint/recommended.json` — Base + TypeScript rules for OxLint
+- `oxlint/base.json` — Core JS, import, jest rules for OxLint
+- `oxlint/typescript.json` — TypeScript rules for OxLint
+
+Compatible with OxLint `jsPlugins` for loading kubit custom rules natively.
+
+### Bundled Dependencies
+
+All third-party ESLint plugins are bundled as direct dependencies.
+Users only need to install `eslint-plugin-kubit` — no manual plugin installs required.
+
+### CI/CD
+
+- PR validation workflow (Node 20 + 22)
+- Automated release workflow with Changesets

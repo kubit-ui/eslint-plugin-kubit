@@ -1,0 +1,114 @@
+{
+  "name": "eslint-plugin-kubit",
+  "version": "0.0.1",
+  "description": "A lightweight ESLint plugin with custom rules for Kubit projects. Framework-agnostic, compatible with Biome and OxLint.",
+  "author": {
+    "name": "Kubit Team",
+    "email": "kubit@opendigitalservices.com",
+    "url": "https://www.kubit-ui.com/",
+    "organization": "Kubit",
+    "organizationUrl": "https://www.kubit-ui.com/",
+    "social": {
+      "twitter": "https://twitter.com/kubit_ui",
+      "github": "https://github.com/kubit-ui/eslint-plugin-kubit"
+    }
+  },
+  "homepage": "https://github.com/kubit-ui/eslint-plugin-kubit#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kubit-ui/eslint-plugin-kubit.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kubit-ui/eslint-plugin-kubit/issues",
+    "email": "kubit.kab.dev@gmail.com"
+  },
+  "license": "Apache-2.0",
+  "private": false,
+  "main": "lib/index.js",
+  "exports": {
+    ".": {
+      "require": "./lib/index.js",
+      "import": "./lib/index.js"
+    }
+  },
+  "files": [
+    "lib",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md",
+    "MIGRATION.md",
+    "oxlint"
+  ],
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "lint": "eslint lib/ tests/",
+    "lint:fix": "eslint lib/ tests/ --fix",
+    "changeset": "changeset",
+    "changeset:version": "changeset version",
+    "changeset:publish": "changeset publish",
+    "changeset:status": "changeset status --verbose"
+  },
+  "sideEffects": false,
+  "keywords": [
+    "eslint",
+    "eslint-plugin",
+    "eslint-flat-config",
+    "typescript",
+    "javascript",
+    "code-quality",
+    "linting",
+    "kubit",
+    "import-rules",
+    "no-index-import",
+    "no-relative-import",
+    "biome-compatible",
+    "oxlint-compatible",
+    "best-practices"
+  ],
+  "packageManager": "pnpm@10.29.2",
+  "engines": {
+    "node": ">=20.19.0",
+    "pnpm": ">=9.0.0"
+  },
+  "dependencies": {
+    "@eslint/compat": "^2.0.2",
+    "@eslint/js": "^10.0.1",
+    "@typescript-eslint/eslint-plugin": "^8.55.0",
+    "@typescript-eslint/parser": "^8.55.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-import-resolver-typescript": "^4.4.4",
+    "eslint-plugin-compat": "^6.1.0",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-jest": "^29.13.0",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-perfectionist": "^5.5.0",
+    "eslint-plugin-prettier": "^5.5.5",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "7.1.0-canary-272441a9-20260209",
+    "eslint-plugin-unused-imports": "^4.4.1",
+    "typescript-eslint": "^8.55.0"
+  },
+  "peerDependencies": {
+    "eslint": "^10.0.0"
+  },
+  "peerDependenciesMeta": {
+    "typescript": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.29.8",
+    "eslint": "10.0.2",
+    "vitest": "^3.2.1"
+  },
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/kubit-ui"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  }
+}
