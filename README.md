@@ -9,7 +9,7 @@
 **A lightweight, composable ESLint plugin for TypeScript and React projects**
 
 Zero-config presets with all the rules from `eslint-config-kubit`, now as a proper ESLint plugin.
-Compatible with Biome, OxLint, and ESLint flat config.
+Compatible with OxLint and ESLint flat config.
 
 [Installation](#installation) | [Quick Start](#quick-start) | [Configs](#available-configs) | [Rules](#custom-rules) | [Migration](MIGRATION.md) | [Contributing](CONTRIBUTING.md)
 
@@ -25,7 +25,7 @@ Compatible with Biome, OxLint, and ESLint flat config.
 | ------------------------------------- | -------------------------------------------------- |
 | Opaque function that hides everything | Transparent, composable flat configs               |
 | ~15 plugins bundled as dependencies   | All plugins bundled — one install, zero setup      |
-| Incompatible with Biome/OxLint        | Use only what Biome/OxLint don't cover             |
+| Incompatible with OxLint              | Use only what OxLint doesn't cover                 |
 | `isReact` flag controls rule loading  | Pick `recommended` or `recommended-react`          |
 | Must override to disable rules        | Cherry-pick configs: `base`, `typescript`, `react` |
 
@@ -82,7 +82,7 @@ module.exports = [
 
 ### Minimal (only Kubit custom rules)
 
-For projects using Biome or OxLint for standard rules:
+For projects using OxLint for standard rules:
 
 ```js
 // eslint.config.js
@@ -93,17 +93,16 @@ module.exports = [kubit.configs["kubit-rules"]];
 
 ## Available Configs
 
-| Config                  | Description                     | Use case                         |
-| ----------------------- | ------------------------------- | -------------------------------- |
-| **`recommended`**       | All rules without React         | ESLint only                      |
-| **`recommended-react`** | All rules with React + a11y     | ESLint only                      |
-| **`biome`**             | Only rules Biome doesn't cover  | ESLint + Biome                   |
-| **`oxlint`**            | Only rules OxLint doesn't cover | ESLint + OxLint                  |
-| `kubit-rules`           | Only 2 Kubit custom rules       | Biome/OxLint with minimal ESLint |
-| `base`                  | General JS/ES6 rules            | Cherry-pick                      |
-| `typescript`            | TypeScript-specific rules       | Cherry-pick                      |
-| `react`                 | React + a11y rules              | Cherry-pick                      |
-| `compat`                | Browser compatibility           | Optional                         |
+| Config                  | Description                     | Use case                   |
+| ----------------------- | ------------------------------- | -------------------------- |
+| **`recommended`**       | All rules without React         | ESLint only                |
+| **`recommended-react`** | All rules with React + a11y     | ESLint only                |
+| **`oxlint`**            | Only rules OxLint doesn't cover | ESLint + OxLint            |
+| `kubit-rules`           | Only 2 Kubit custom rules       | OxLint with minimal ESLint |
+| `base`                  | General JS/ES6 rules            | Cherry-pick                |
+| `typescript`            | TypeScript-specific rules       | Cherry-pick                |
+| `react`                 | React + a11y rules              | Cherry-pick                |
+| `compat`                | Browser compatibility           | Optional                   |
 
 ### Composing configs
 
@@ -181,24 +180,9 @@ import { helper } from "@/utils/helper";
 
 **Options**: `allowSameFolder`, `rootDir`, `prefix`, `allowedDepth` | [Full docs](docs/rules/no-relative-import-paths.md)
 
-## Using with Biome
-
-Use the `biome` config — only the rules Biome doesn't cover + kubit custom rules:
-
-```js
-// eslint.config.js
-const kubit = require("@kubit-ui-web/eslint-plugin-kubit");
-
-module.exports = [kubit.configs.biome];
-```
-
-Includes: `import/no-cycle`, `complexity`, `consistent-return`, perfectionist sorting, some `@typescript-eslint` rules, jest rules, and both kubit custom rules.
-
-Biome handles the rest: formatting, `no-debugger`, `no-var`, `prefer-const`, `eqeqeq`, `no-eval`, `no-explicit-any`, `useImportType`, `noUnusedImports`, and more.
-
 ## Using with OxLint
 
-Use the `oxlint` config — even smaller because OxLint covers more rules (~10 rules):
+Use the `oxlint` config — only the rules OxLint doesn't cover (~10 rules):
 
 ```js
 // eslint.config.js
@@ -213,17 +197,17 @@ OxLint handles everything else including `import/no-cycle`, `complexity`, jest, 
 
 ### Comparison: what each config includes
 
-| Rule category       | `recommended` | `biome` | `oxlint` | `kubit-rules` |
-| ------------------- | ------------- | ------- | -------- | ------------- |
-| Kubit custom rules  | 2             | 2       | 2        | 2             |
-| Prettier formatting | 1             | -       | 1        | -             |
-| JS code quality     | ~25           | ~10     | -        | -             |
-| Import rules        | 3             | 1       | -        | -             |
-| Perfectionist       | 3             | 2       | 3        | -             |
-| Jest                | 2             | 2       | -        | -             |
-| TypeScript          | 11            | 8       | 3        | -             |
-| React + a11y        | ~60           | -       | -        | -             |
-| **Total rules**     | **~50+**      | **~25** | **~10**  | **2**         |
+| Rule category       | `recommended` | `oxlint` | `kubit-rules` |
+| ------------------- | ------------- | -------- | ------------- |
+| Kubit custom rules  | 2             | 2        | 2             |
+| Prettier formatting | 1             | 1        | -             |
+| JS code quality     | ~25           | -        | -             |
+| Import rules        | 3             | -        | -             |
+| Perfectionist       | 3             | 3        | -             |
+| Jest                | 2             | -        | -             |
+| TypeScript          | 11            | 3        | -             |
+| React + a11y        | ~60           | -        | -             |
+| **Total rules**     | **~50+**      | **~10**  | **2**         |
 
 ## Migrating from `eslint-config-kubit`
 

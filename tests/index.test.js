@@ -61,9 +61,8 @@ describe("@kubit-ui-web/eslint-plugin-kubit", () => {
       expect(plugin.configs.recommended).toBeDefined();
       expect(plugin.configs["recommended-react"]).toBeDefined();
       expect(plugin.configs.compat).toBeDefined();
-      expect(plugin.configs.biome).toBeDefined();
       expect(plugin.configs.oxlint).toBeDefined();
-      expect(Object.keys(plugin.configs)).toHaveLength(9);
+      expect(Object.keys(plugin.configs)).toHaveLength(8);
     });
 
     it("kubit-rules config should contain only custom kubit rules", () => {
@@ -156,28 +155,6 @@ describe("@kubit-ui-web/eslint-plugin-kubit", () => {
       expect(config.settings.browsers).toBeDefined();
     });
 
-    it("biome config should contain only rules Biome does not cover + kubit rules", () => {
-      const config = plugin.configs.biome;
-      expect(config.plugins.kubit).toBe(plugin);
-      // kubit custom rules included
-      expect(config.rules["kubit/no-index-import"]).toBe("error");
-      expect(config.rules["kubit/no-relative-import-paths"]).toBeDefined();
-      // rules Biome doesn't cover
-      expect(config.rules["import/no-cycle"]).toBeDefined();
-      expect(config.rules["complexity"]).toBeDefined();
-      expect(config.rules["consistent-return"]).toBe("error");
-      expect(config.rules["perfectionist/sort-objects"]).toBeDefined();
-      expect(
-        config.rules["@typescript-eslint/explicit-module-boundary-types"],
-      ).toBeDefined();
-      expect(config.rules["@typescript-eslint/no-shadow"]).toBe("error");
-      // should NOT have rules Biome covers
-      expect(config.rules["no-debugger"]).toBeUndefined();
-      expect(config.rules["no-var"]).toBeUndefined();
-      expect(config.rules["prefer-const"]).toBeUndefined();
-      expect(config.rules["prettier/prettier"]).toBeUndefined();
-    });
-
     it("oxlint config should contain only rules OxLint does not cover + kubit rules", () => {
       const config = plugin.configs.oxlint;
       expect(config.plugins.kubit).toBe(plugin);
@@ -199,10 +176,6 @@ describe("@kubit-ui-web/eslint-plugin-kubit", () => {
       expect(
         config.rules["@typescript-eslint/no-explicit-any"],
       ).toBeUndefined();
-      // oxlint should have fewer rules than biome config
-      const biomeRuleCount = Object.keys(plugin.configs.biome.rules).length;
-      const oxlintRuleCount = Object.keys(config.rules).length;
-      expect(oxlintRuleCount).toBeLessThan(biomeRuleCount);
     });
 
     it("recommended config should merge base + typescript + kubit rules with languageOptions", () => {

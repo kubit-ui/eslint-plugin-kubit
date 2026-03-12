@@ -10,7 +10,7 @@ This guide explains how to migrate from the monolithic `eslint-config-kubit` (fu
 | ------------------------------------- | -------------------------------------------- |
 | Opaque function that hides everything | Transparent, composable flat configs         |
 | All-or-nothing configuration          | Cherry-pick: `base`, `typescript`, `react`   |
-| Incompatible with Biome/OxLint        | Use `kubit-rules` config alongside Biome     |
+| Incompatible with OxLint              | Use `kubit-rules` config alongside OxLint    |
 | `isReact` flag controls rule loading  | Pick `recommended` or `recommended-react`    |
 | Hidden rule configurations            | All rules visible and overridable            |
 | All plugins bundled as dependencies   | All plugins still bundled (zero extra setup) |
@@ -122,49 +122,5 @@ module.exports = [
   // Use recommended-react instead of recommended
   kubit.configs["recommended-react"],
   // ... your project-specific overrides
-];
-```
-
-### Step 5: Integrate with Biome (optional)
-
-If you're also migrating to Biome, you can now remove from ESLint all the rules that Biome covers:
-
-```jsonc
-// biome.json
-{
-  "linter": {
-    "enabled": true,
-    "rules": {
-      "recommended": true,
-    },
-  },
-  "formatter": {
-    "enabled": true,
-  },
-  "organizeImports": {
-    "enabled": true,
-  },
-}
-```
-
-Your `eslint.config.js` becomes minimal — only rules Biome doesn't cover:
-
-```js
-const kubit = require("@kubit-ui-web/eslint-plugin-kubit");
-
-module.exports = [
-  kubit.configs.recommended,
-  {
-    rules: {
-      "kubit/no-index-import": [
-        "error",
-        {
-          aliases: {
-            "@/components": "./src/components/*",
-          },
-        },
-      ],
-    },
-  },
 ];
 ```

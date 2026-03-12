@@ -1,5 +1,13 @@
 # @kubit-ui-web/eslint-plugin-kubit
 
+## 0.0.4
+
+### Removed
+
+- Removed `biome` config and all Biome-related references
+- The plugin no longer ships a Biome-compatible ESLint config
+- Use `oxlint` config or `kubit-rules` for projects using alternative linters
+
 ## 0.0.3
 
 ### New Custom Rules
@@ -40,7 +48,6 @@ Full migration from `eslint-config-kubit` to `@kubit-ui-web/eslint-plugin-kubit`
 - `react` — React + JSX accessibility rules
 - `compat` — Browser compatibility rules
 - `kubit-rules` — Only the 2 custom kubit rules
-- `biome` — Rules Biome doesn't cover + kubit custom rules
 - `oxlint` — Rules OxLint doesn't cover + kubit custom rules
 
 ### OxLint Configs (JSON)
