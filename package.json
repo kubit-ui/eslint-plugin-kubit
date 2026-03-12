@@ -1,6 +1,6 @@
 {
   "name": "@kubit-ui-web/eslint-plugin-kubit",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A lightweight ESLint plugin with custom rules for Kubit projects. Framework-agnostic, compatible with Biome and OxLint.",
   "author": {
     "name": "Kubit Team",

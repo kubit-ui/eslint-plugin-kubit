@@ -1,5 +1,18 @@
 # @kubit-ui-web/eslint-plugin-kubit
 
+## 0.0.3
+
+### New Custom Rules
+
+- `kubit/jsx-pascal-case` — Enforce PascalCase for user-defined JSX components
+- `kubit/no-multi-comp` — Enforce only one React component definition per file
+- `kubit/jsx-sort-props` — Enforce sorted props in JSX elements (reservedFirst, shorthandFirst, callbacksLast)
+
+### OxLint Configs
+
+- `oxlint/react.json` — React, React Hooks, and JSX a11y rules for OxLint (includes the 3 new kubit rules)
+- `oxlint/recommended.json` — Now extends `react.json` for full React coverage
+
 ## 0.0.2
 
 ### Fixes
