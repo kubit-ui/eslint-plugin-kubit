@@ -11,7 +11,10 @@ describe("@kubit-ui-web/eslint-plugin-kubit", () => {
     expect(plugin.rules).toBeDefined();
     expect(plugin.rules["no-index-import"]).toBeDefined();
     expect(plugin.rules["no-relative-import-paths"]).toBeDefined();
-    expect(Object.keys(plugin.rules)).toHaveLength(2);
+    expect(plugin.rules["jsx-pascal-case"]).toBeDefined();
+    expect(plugin.rules["no-multi-comp"]).toBeDefined();
+    expect(plugin.rules["jsx-sort-props"]).toBeDefined();
+    expect(Object.keys(plugin.rules)).toHaveLength(5);
   });
 
   it("each rule should have proper meta information", () => {
