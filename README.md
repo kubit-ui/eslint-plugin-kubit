@@ -191,7 +191,8 @@ module.exports = [kubit.configs.oxlint];
 
 ### Option B: OxLint config (load kubit rules directly in OxLint)
 
-Use the ready-made `.oxlintrc.json` presets from the `oxlint/` directory:
+Use the ready-made `.oxlintrc.json` presets from the `oxlint/` directory.
+Each preset already includes `jsPlugins` with a relative path, so the kubit plugin loads automatically:
 
 ```jsonc
 // .oxlintrc.json
@@ -222,7 +223,12 @@ Add the plugin directly to your `.oxlintrc.json`:
 ```jsonc
 // .oxlintrc.json
 {
-  "jsPlugins": ["@kubit-ui-web/eslint-plugin-kubit"],
+  "jsPlugins": [
+    {
+      "name": "kubit",
+      "specifier": "./node_modules/@kubit-ui-web/eslint-plugin-kubit/lib/index.js",
+    },
+  ],
   "rules": {
     "kubit/no-index-import": "error",
     "kubit/enforce-named-exports": "error",

@@ -1,5 +1,13 @@
 # @kubit-ui-web/eslint-plugin-kubit
 
+## 0.0.6
+
+### Fixes
+
+- OxLint configs now use relative path `../lib/index.js` instead of package specifier `@kubit-ui-web/eslint-plugin-kubit` for `jsPlugins`
+- Fixes `Plugin 'kubit' not found` error in CI environments when using `extends` with oxlint presets
+- Updated README with corrected OxLint integration examples
+
 ## 0.0.5
 
 ### New Custom Rules — Architecture (Phase 2)

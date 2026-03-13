@@ -1,6 +1,6 @@
 {
   "plugins": ["typescript"],
-  "jsPlugins": ["@kubit-ui-web/eslint-plugin-kubit"],
+  "jsPlugins": [{ "name": "kubit", "specifier": "../lib/index.js" }],
   "rules": {
     "typescript/no-non-null-assertion": "error",
     "typescript/no-explicit-any": "error",

@@ -1,5 +1,5 @@
 {
-  "jsPlugins": ["@kubit-ui-web/eslint-plugin-kubit"],
+  "jsPlugins": [{ "name": "kubit", "specifier": "../lib/index.js" }],
   "rules": {
     "kubit/no-framework-in-core": "error",
     "kubit/no-cross-boundary-import": [
