@@ -151,38 +151,36 @@ module.exports = [
 
 ## Custom Rules
 
-### `kubit/no-index-import`
+### Import & Export Rules
 
-Disallow imports from index/barrel files to improve tree-shaking.
+| Rule                                                                       | Description                                      | Auto-fix |
+| -------------------------------------------------------------------------- | ------------------------------------------------ | -------- |
+| [`kubit/no-index-import`](docs/rules/no-index-import.md)                   | Disallow imports from index/barrel files         | ✅       |
+| [`kubit/no-relative-import-paths`](docs/rules/no-relative-import-paths.md) | Enforce absolute import paths                    | ✅       |
+| [`kubit/enforce-named-exports`](docs/rules/enforce-named-exports.md)       | Disallow default exports for better tree-shaking | -        |
 
-```js
-// Bad
-import { Button } from "@/components/Button/index";
-import { Button } from "@/components/Button"; // if contains index.ts
+### React / JSX Rules
 
-// Good
-import { Button } from "@/components/Button/Button";
-```
+| Rule                                                       | Description                           | Auto-fix |
+| ---------------------------------------------------------- | ------------------------------------- | -------- |
+| [`kubit/jsx-pascal-case`](docs/rules/jsx-pascal-case.md)   | Enforce PascalCase for JSX components | -        |
+| [`kubit/no-multi-comp`](docs/rules/no-multi-comp.md)       | One component per file                | -        |
+| [`kubit/jsx-sort-props`](docs/rules/jsx-sort-props.md)     | Enforce sorted JSX props              | ✅       |
+| [`kubit/no-inline-styles`](docs/rules/no-inline-styles.md) | Disallow inline `style={{}}` in JSX   | -        |
 
-**Options**: `aliases`, `ignoreImports` | [Full docs](docs/rules/no-index-import.md)
+### Architecture Rules
 
-### `kubit/no-relative-import-paths`
-
-Enforce absolute import paths. Auto-fixable.
-
-```js
-// Bad
-import { helper } from "../../utils/helper";
-
-// Good
-import { helper } from "@/utils/helper";
-```
-
-**Options**: `allowSameFolder`, `rootDir`, `prefix`, `allowedDepth` | [Full docs](docs/rules/no-relative-import-paths.md)
+| Rule                                                                         | Description                                            | Auto-fix |
+| ---------------------------------------------------------------------------- | ------------------------------------------------------ | -------- |
+| [`kubit/no-public-field-interface`](docs/rules/no-public-field-interface.md) | Enforce behavior-only interfaces (methods, not fields) | -        |
+| [`kubit/no-framework-in-core`](docs/rules/no-framework-in-core.md)           | Prohibit framework imports inside `/core/`             | -        |
+| [`kubit/no-cross-boundary-import`](docs/rules/no-cross-boundary-import.md)   | Enforce architectural layer boundaries                 | -        |
 
 ## Using with OxLint
 
-Use the `oxlint` config — only the rules OxLint doesn't cover (~10 rules):
+All 10 kubit rules work natively in OxLint via the [`jsPlugins`](https://oxc.rs/docs/guide/usage/linter/js-plugins) feature.
+
+### Option A: ESLint config (only rules OxLint doesn't cover)
 
 ```js
 // eslint.config.js
@@ -191,15 +189,72 @@ const kubit = require("@kubit-ui-web/eslint-plugin-kubit");
 module.exports = [kubit.configs.oxlint];
 ```
 
-Includes: `prettier/prettier`, perfectionist sorting, 3 niche `@typescript-eslint` rules, and both kubit custom rules.
+### Option B: OxLint config (load kubit rules directly in OxLint)
 
-OxLint handles everything else including `import/no-cycle`, `complexity`, jest, most TS rules, React, and a11y rules.
+Use the ready-made `.oxlintrc.json` presets from the `oxlint/` directory:
+
+```jsonc
+// .oxlintrc.json
+{
+  "extends": [
+    "./node_modules/@kubit-ui-web/eslint-plugin-kubit/oxlint/recommended.json",
+  ],
+}
+```
+
+Or pick individual configs:
+
+```jsonc
+// .oxlintrc.json
+{
+  "extends": [
+    "./node_modules/@kubit-ui-web/eslint-plugin-kubit/oxlint/base.json",
+    "./node_modules/@kubit-ui-web/eslint-plugin-kubit/oxlint/typescript.json",
+    "./node_modules/@kubit-ui-web/eslint-plugin-kubit/oxlint/architecture.json",
+  ],
+}
+```
+
+### Option C: Manual `jsPlugins` setup
+
+Add the plugin directly to your `.oxlintrc.json`:
+
+```jsonc
+// .oxlintrc.json
+{
+  "jsPlugins": ["@kubit-ui-web/eslint-plugin-kubit"],
+  "rules": {
+    "kubit/no-index-import": "error",
+    "kubit/enforce-named-exports": "error",
+    "kubit/no-framework-in-core": "error",
+    "kubit/no-cross-boundary-import": "error",
+    "kubit/jsx-pascal-case": "error",
+    "kubit/no-multi-comp": "error",
+    "kubit/jsx-sort-props": [
+      "error",
+      { "callbacksLast": true, "shorthandFirst": true, "reservedFirst": true },
+    ],
+    "kubit/no-inline-styles": "error",
+    "kubit/no-public-field-interface": "error",
+  },
+}
+```
+
+### OxLint presets
+
+| Preset                     | Contents                                      |
+| -------------------------- | --------------------------------------------- |
+| `oxlint/recommended.json`  | Everything below combined                     |
+| `oxlint/base.json`         | JS quality + import/jest + kubit import rules |
+| `oxlint/typescript.json`   | TS rules + `no-public-field-interface`        |
+| `oxlint/react.json`        | React + a11y + JSX kubit rules                |
+| `oxlint/architecture.json` | Layer boundaries + framework isolation        |
 
 ### Comparison: what each config includes
 
 | Rule category       | `recommended` | `oxlint` | `kubit-rules` |
 | ------------------- | ------------- | -------- | ------------- |
-| Kubit custom rules  | 2             | 2        | 2             |
+| Kubit custom rules  | 10            | 10       | 2             |
 | Prettier formatting | 1             | 1        | -             |
 | JS code quality     | ~25           | -        | -             |
 | Import rules        | 3             | -        | -             |
@@ -207,7 +262,7 @@ OxLint handles everything else including `import/no-cycle`, `complexity`, jest, 
 | Jest                | 2             | -        | -             |
 | TypeScript          | 11            | 3        | -             |
 | React + a11y        | ~60           | -        | -             |
-| **Total rules**     | **~50+**      | **~10**  | **2**         |
+| **Total rules**     | **~60+**      | **~20**  | **2**         |
 
 ## Migrating from `eslint-config-kubit`
 

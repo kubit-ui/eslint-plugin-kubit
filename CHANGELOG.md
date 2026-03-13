@@ -1,5 +1,40 @@
 # @kubit-ui-web/eslint-plugin-kubit
 
+## 0.0.5
+
+### New Custom Rules — Architecture (Phase 2)
+
+- `kubit/no-public-field-interface` — Enforce behavior-only interfaces (methods, not fields)
+- `kubit/no-framework-in-core` — Prohibit framework imports (React, Angular, Vue, etc.) inside `/core/` directories
+- `kubit/enforce-named-exports` — Disallow default exports for better tree-shaking and refactoring safety
+- `kubit/no-cross-boundary-import` — Enforce architectural layer boundaries (core, adapters, interfaces, utils)
+- `kubit/no-inline-styles` — Disallow inline `style={{}}` in JSX elements
+
+### Auto-fix (Phase 1)
+
+- `kubit/jsx-sort-props` — Auto-fix now reorders JSX props (respects reservedFirst, shorthandFirst, callbacksLast)
+- `kubit/no-index-import` — Auto-fix now strips `/index`, `/index.ts`, `/index.tsx`, `/index.js`, `/index.jsx` suffixes
+
+### Tests (Phase 1)
+
+- Added unit tests for `jsx-pascal-case` (16 tests), `no-multi-comp` (13 tests), `jsx-sort-props` (17 tests)
+- Added unit tests for all 5 new architecture rules (62 tests)
+- Total: 147 tests across 11 test files
+
+### Documentation (Phase 1 + 2)
+
+- Added full docs for all 8 rules: `jsx-pascal-case`, `no-multi-comp`, `jsx-sort-props`, `no-inline-styles`, `no-public-field-interface`, `no-framework-in-core`, `enforce-named-exports`, `no-cross-boundary-import`
+
+### OxLint Integration
+
+- All OxLint configs now include `jsPlugins: ["@kubit-ui-web/eslint-plugin-kubit"]` for native rule loading
+- New `oxlint/architecture.json` preset with layer boundary and framework isolation rules
+- `oxlint/base.json` — Added kubit import/export rules
+- `oxlint/react.json` — Added `kubit/no-inline-styles`
+- `oxlint/typescript.json` — Added `kubit/no-public-field-interface`
+- `oxlint/recommended.json` — Now extends `architecture.json`
+- Updated README with 3 integration options (preset, cherry-pick, manual jsPlugins)
+
 ## 0.0.4
 
 ### Removed

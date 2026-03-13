@@ -1,5 +1,6 @@
 {
   "plugins": ["import", "jest"],
+  "jsPlugins": ["@kubit-ui-web/eslint-plugin-kubit"],
   "rules": {
     "curly": ["error", "all"],
     "no-cond-assign": ["error", "always"],
@@ -29,6 +30,16 @@
 
     "import/no-cycle": "error",
 
-    "jest/no-focused-tests": "error"
+    "jest/no-focused-tests": "error",
+
+    "kubit/no-index-import": "error",
+    "kubit/no-relative-import-paths": [
+      "error",
+      {
+        "allowSameFolder": true,
+        "allowedDepth": 2
+      }
+    ],
+    "kubit/enforce-named-exports": "error"
   }
 }

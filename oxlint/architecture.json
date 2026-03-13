@@ -1,0 +1,19 @@
+{
+  "jsPlugins": ["@kubit-ui-web/eslint-plugin-kubit"],
+  "rules": {
+    "kubit/no-framework-in-core": "error",
+    "kubit/no-cross-boundary-import": [
+      "error",
+      {
+        "layers": {
+          "core": [],
+          "interfaces": [],
+          "utils": [],
+          "adapters": ["core", "interfaces", "utils"]
+        }
+      }
+    ],
+    "kubit/enforce-named-exports": "error",
+    "kubit/no-public-field-interface": "error"
+  }
+}

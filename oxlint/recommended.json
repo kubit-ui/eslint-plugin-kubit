@@ -1,3 +1,8 @@
 {
-  "extends": ["./base.json", "./typescript.json", "./react.json"]
+  "extends": [
+    "./base.json",
+    "./typescript.json",
+    "./react.json",
+    "./architecture.json"
+  ]
 }

@@ -1,5 +1,6 @@
 {
   "plugins": ["react", "react-hooks", "jsx-a11y"],
+  "jsPlugins": ["@kubit-ui-web/eslint-plugin-kubit"],
   "rules": {
     "react/jsx-curly-brace-presence": [
       "error",
@@ -51,6 +52,7 @@
         "shorthandFirst": true,
         "reservedFirst": true
       }
-    ]
+    ],
+    "kubit/no-inline-styles": "error"
   }
 }
