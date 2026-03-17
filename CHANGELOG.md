@@ -1,5 +1,13 @@
 # @kubit-ui-web/eslint-plugin-kubit
 
+## 0.0.8
+
+### Patch Changes
+
+- add push trigger to release workflow for direct-to-main releases
+
+  PR: #push-e615ddd0b1b63f83095a83b9a44d5b780d414879
+
 ## 0.0.7
 
 ### Patch Changes
