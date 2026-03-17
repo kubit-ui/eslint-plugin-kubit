@@ -35,6 +35,10 @@ jobs:
       - name: Run tests
         run: yarn test
 
+      - name: Fetch main branch
+        if: matrix.node-version == 22
+        run: git fetch origin main:main
+
       - name: Check changeset
         if: matrix.node-version == 22
         run: yarn changeset:status
