@@ -65,10 +65,8 @@
     "oxlint-compatible",
     "best-practices"
   ],
-  "packageManager": "yarn@4.9.1",
   "engines": {
-    "node": ">=20.0.0 <25.0.0",
-    "yarn": ">=4.0.0"
+    "node": ">=20.0.0"
   },
   "dependencies": {
     "@eslint/compat": "^2.0.2",
