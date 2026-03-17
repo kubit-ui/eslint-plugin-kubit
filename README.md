@@ -1,4 +1,4 @@
-# Kubit ESLint Plugin
+# Kubit ESLint Plugin <!-- v0.0.8 -->
 
 <div align="center">
 
@@ -198,8 +198,8 @@ Each preset already includes `jsPlugins` with a relative path, so the kubit plug
 // .oxlintrc.json
 {
   "extends": [
-    "./node_modules/@kubit-ui-web/eslint-plugin-kubit/oxlint/recommended.json",
-  ],
+    "./node_modules/@kubit-ui-web/eslint-plugin-kubit/oxlint/recommended.json"
+  ]
 }
 ```
 
@@ -211,8 +211,8 @@ Or pick individual configs:
   "extends": [
     "./node_modules/@kubit-ui-web/eslint-plugin-kubit/oxlint/base.json",
     "./node_modules/@kubit-ui-web/eslint-plugin-kubit/oxlint/typescript.json",
-    "./node_modules/@kubit-ui-web/eslint-plugin-kubit/oxlint/architecture.json",
-  ],
+    "./node_modules/@kubit-ui-web/eslint-plugin-kubit/oxlint/architecture.json"
+  ]
 }
 ```
 
@@ -226,8 +226,8 @@ Add the plugin directly to your `.oxlintrc.json`:
   "jsPlugins": [
     {
       "name": "kubit",
-      "specifier": "./node_modules/@kubit-ui-web/eslint-plugin-kubit/lib/index.js",
-    },
+      "specifier": "./node_modules/@kubit-ui-web/eslint-plugin-kubit/lib/index.js"
+    }
   ],
   "rules": {
     "kubit/no-index-import": "error",
@@ -238,11 +238,11 @@ Add the plugin directly to your `.oxlintrc.json`:
     "kubit/no-multi-comp": "error",
     "kubit/jsx-sort-props": [
       "error",
-      { "callbacksLast": true, "shorthandFirst": true, "reservedFirst": true },
+      { "callbacksLast": true, "shorthandFirst": true, "reservedFirst": true }
     ],
     "kubit/no-inline-styles": "error",
-    "kubit/no-public-field-interface": "error",
-  },
+    "kubit/no-public-field-interface": "error"
+  }
 }
 ```
 
