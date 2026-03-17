@@ -29,24 +29,27 @@ This project follows the **fork-based contribution model** to:
    git fetch upstream
    ```
 
-4. **Create a Feature Branch**: Always create a new branch for your changes. Use proper branch naming conventions for automatic version detection.
+4. **Install Dependencies**: This project uses **Yarn Berry** as package manager.
+
+   ```sh
+   # Enable Corepack (ships with Node.js)
+   corepack enable
+
+   # Install dependencies
+   yarn install
+   ```
+
+5. **Create a Feature Branch**: Always create a new branch for your changes. Use proper branch naming conventions for automatic version detection.
 
    ```sh
    git checkout -b <branch-type>/<branch-name>
-   ```
-
-5. **Install Dependencies and Run Tests**:
-
-   ```sh
-   pnpm install
-   pnpm test
    ```
 
 6. **Make Changes**:
    - Follow the coding standards outlined in this guide
    - Add or update tests for your changes
    - Update documentation if necessary
-   - Test your changes thoroughly using `pnpm test`
+   - Test your changes thoroughly using `yarn test`
 
 7. **Commit Changes**: Use conventional commit messages for clarity.
 
@@ -85,7 +88,7 @@ When contributing a new ESLint rule:
 3. Create tests in `tests/rules/<rule-name>.test.js`
 4. Add documentation in `docs/rules/<rule-name>.md`
 5. Update `README.md` with the new rule
-6. Ensure all tests pass with `pnpm test`
+6. Ensure all tests pass with `yarn test`
 
 Every rule **must** include:
 
@@ -132,41 +135,78 @@ The version bump is automatically detected from your branch name:
 
 ### Requirements
 
-Before contributing, ensure you have the following installed:
+Before contributing, ensure you have:
 
-- **Node.js**: v20.x or higher (recommended: v22.x)
-- **pnpm**: v9.x or higher (recommended: v10.29.2)
+- **Node.js**: v20.x or higher
+- **Yarn**: v4.x or higher (via Corepack)
 - **Git**: Latest version
+
+Check your versions:
+
+```sh
+node --version  # Should show v20.x.x or higher
+yarn --version  # Should show 4.x.x
+```
+
+### Private Registry (optional)
+
+This repo uses the public npm registry by default. If your organization requires a **private registry** (JFrog Artifactory, Nexus, GitHub Packages, etc.), you can override it globally via environment variables — no need to modify any files.
+
+1. Add to your `~/.zshrc` (or `~/.bashrc`):
+
+```sh
+export YARN_NPM_REGISTRY_SERVER="https://your-org.example.com/your-npm-registry/"
+export YARN_NPM_ALWAYS_AUTH=true
+export YARN_ENABLE_STRICT_SSL=false
+```
+
+2. Reload your shell:
+
+```sh
+source ~/.zshrc
+```
+
+3. Verify:
+
+```sh
+yarn config get npmRegistryServer
+# Should show your private registry URL
+```
+
+This applies globally to all Yarn Berry projects. See `.env.example` for reference.
 
 ### Development Commands
 
 ```sh
+# Enable Corepack (ships with Node.js)
+corepack enable
+
 # Install dependencies
-pnpm install
+yarn install
 
 # Run tests
-pnpm test
+yarn test
 
 # Run tests in watch mode
-pnpm test:watch
+yarn test:watch
 
 # Run tests with coverage
-pnpm test:coverage
+yarn test:coverage
 
 # Lint the codebase
-pnpm lint
+yarn lint
 
 # Test locally in another project
-pnpm link --global
+yarn link
 cd /path/to/test-project
-pnpm link --global @kubit-ui-web/eslint-plugin-kubit
+yarn link @kubit-ui-web/eslint-plugin-kubit
 ```
 
 ### Testing Your Changes
 
 Before submitting your PR:
 
-1. **Run all tests**: `pnpm test`
+1. **Run all tests**: `yarn test`
 2. **Verify no conflicts**: Ensure rules don't conflict with each other
 3. **Check documentation**: Update docs with any new options
 4. **Validate examples**: Ensure all code examples in docs are correct

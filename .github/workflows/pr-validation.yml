@@ -18,21 +18,27 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-          cache: pnpm
+
+      - name: Enable Corepack
+        run: corepack enable
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: yarn install --immutable
 
       - name: Run tests
-        run: pnpm test
+        run: yarn test
+
+      - name: Fetch main branch
+        if: matrix.node-version == 22
+        run: git fetch origin main:main
 
       - name: Check changeset
-        run: pnpm changeset:status
+        if: matrix.node-version == 22
+        run: yarn changeset:status
