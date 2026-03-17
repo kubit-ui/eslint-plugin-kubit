@@ -1,5 +1,13 @@
 # @kubit-ui-web/eslint-plugin-kubit
 
+## 0.0.9
+
+### Patch Changes
+
+- replace custom jsx-sort-props with perfectionist/sort-jsx-props
+
+  PR: #push-6a2144881643dcd0629f3b12664cd2c567067172
+
 ## 0.0.8
 
 ### Patch Changes
