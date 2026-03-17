@@ -13,13 +13,12 @@ describe("@kubit-ui-web/eslint-plugin-kubit", () => {
     expect(plugin.rules["no-relative-import-paths"]).toBeDefined();
     expect(plugin.rules["jsx-pascal-case"]).toBeDefined();
     expect(plugin.rules["no-multi-comp"]).toBeDefined();
-    expect(plugin.rules["jsx-sort-props"]).toBeDefined();
     expect(plugin.rules["no-public-field-interface"]).toBeDefined();
     expect(plugin.rules["no-framework-in-core"]).toBeDefined();
     expect(plugin.rules["enforce-named-exports"]).toBeDefined();
     expect(plugin.rules["no-cross-boundary-import"]).toBeDefined();
     expect(plugin.rules["no-inline-styles"]).toBeDefined();
-    expect(Object.keys(plugin.rules)).toHaveLength(10);
+    expect(Object.keys(plugin.rules)).toHaveLength(9);
   });
 
   it("each rule should have proper meta information", () => {

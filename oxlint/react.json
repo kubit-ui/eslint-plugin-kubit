@@ -1,6 +1,9 @@
 {
   "plugins": ["react", "react-hooks", "jsx-a11y"],
-  "jsPlugins": [{ "name": "kubit", "specifier": "../lib/index.js" }],
+  "jsPlugins": [
+    { "name": "kubit", "specifier": "../lib/index.js" },
+    { "name": "perfectionist", "specifier": "eslint-plugin-perfectionist" }
+  ],
   "rules": {
     "react/jsx-curly-brace-presence": [
       "error",
@@ -45,14 +48,23 @@
     "jsx-a11y/tabindex-no-positive": "error",
     "kubit/jsx-pascal-case": "error",
     "kubit/no-multi-comp": "error",
-    "kubit/jsx-sort-props": [
+    "kubit/no-inline-styles": "error",
+    "perfectionist/sort-jsx-props": [
       "error",
       {
-        "callbacksLast": true,
-        "shorthandFirst": true,
-        "reservedFirst": true
+        "type": "natural",
+        "groups": ["reserved", "shorthand-prop", "prop", "callback"],
+        "customGroups": [
+          {
+            "groupName": "reserved",
+            "elementNamePattern": "^(key|ref|dangerouslySetInnerHTML)$"
+          },
+          {
+            "groupName": "callback",
+            "elementNamePattern": "^on[A-Z]"
+          }
+        ]
       }
-    ],
-    "kubit/no-inline-styles": "error"
+    ]
   }
 }
