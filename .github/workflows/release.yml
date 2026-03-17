@@ -1,50 +1,178 @@
-name: Release
+name: Release Production with Changesets
+
+# This workflow publishes production releases when PRs are merged to main
+# It uses Changesets to manage versioning and publishing
+# It automatically detects version bump type from commits:
+# - feat: ... → MINOR version bump
+# - fix: ... → PATCH version bump
+# - break/breaking/feat!: ... → MAJOR version bump
+#
+# Required secrets:
+# 1. NPM_TOKEN: NPM automation token for publishing packages
+# 2. RELEASE_TOKEN: GitHub PAT with bypass permissions
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: false
+permissions:
+  contents: write
+  pull-requests: write
+  packages: write
+  actions: read
+  id-token: write
 
 jobs:
-  release:
-    name: Release
+  auto-release:
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
-      id-token: write
+
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          token: ${{ secrets.RELEASE_TOKEN || secrets.GITHUB_TOKEN }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22
-          registry-url: https://registry.npmjs.org/
+          node-version: "22"
+          registry-url: "https://registry.npmjs.org"
 
       - name: Enable Corepack
         run: corepack enable
 
       - name: Install dependencies
-        run: yarn install --immutable
+        run: |
+          yarn --version
+          yarn install --immutable
 
       - name: Run tests
         run: yarn test
 
-      - name: Create Release PR or Publish
-        uses: changesets/action@v1
-        with:
-          title: "chore: version packages"
-          commit: "chore: version packages"
-          publish: yarn changeset:publish
-          version: yarn changeset:version
+      - name: Detect version bump type from commits
+        id: detect
+        run: |
+          COMMIT_MSG="${{ github.event.head_commit.message }}"
+          echo "📝 Commit: $COMMIT_MSG"
+
+          BUMP_TYPE="patch"
+          if [[ "$COMMIT_MSG" =~ ^(break|breaking|feat!) ]] || [[ "$COMMIT_MSG" =~ BREAKING\ CHANGE ]]; then
+            BUMP_TYPE="major"
+          elif [[ "$COMMIT_MSG" =~ ^feat ]]; then
+            BUMP_TYPE="minor"
+          fi
+
+          echo "bump_type=$BUMP_TYPE" >> $GITHUB_OUTPUT
+          echo "📦 Version bump type: $BUMP_TYPE"
+
+      - name: Check for existing changesets
+        id: check-changesets
+        run: |
+          CHANGESET_FILES=$(find .changeset -maxdepth 1 -name '*.md' ! -name 'README.md' 2>/dev/null || true)
+          if [ -n "$CHANGESET_FILES" ]; then
+            echo "has_changeset=true" >> $GITHUB_OUTPUT
+            echo "✅ Found pending changeset(s):"
+            echo "$CHANGESET_FILES"
+          else
+            echo "has_changeset=false" >> $GITHUB_OUTPUT
+            echo "⚠️ No changeset found, will create automatically"
+          fi
+
+      - name: Create changeset
+        if: steps.check-changesets.outputs.has_changeset == 'false'
+        run: |
+          BUMP_TYPE="${{ steps.detect.outputs.bump_type }}"
+          COMMIT_MSG="${{ github.event.head_commit.message }}"
+
+          SUMMARY=$(echo "$COMMIT_MSG" | head -n 1 | sed -E 's/^(feat|fix|docs|style|refactor|perf|test|chore|build|ci|break|breaking)(\([^)]+\))?!?:\s*//')
+
+          CHANGESET_ID=$(date +%s)
+          CHANGESET_FILE=".changeset/auto-$CHANGESET_ID.md"
+
+          echo "---" > $CHANGESET_FILE
+          echo "\"@kubit-ui-web/eslint-plugin-kubit\": $BUMP_TYPE" >> $CHANGESET_FILE
+          echo "---" >> $CHANGESET_FILE
+          echo "" >> $CHANGESET_FILE
+          echo "$SUMMARY" >> $CHANGESET_FILE
+
+          echo "✅ Created changeset:"
+          cat $CHANGESET_FILE
+
+      - name: Update version and changelog
+        run: |
+          echo "📦 Updating version and changelog..."
+          yarn changeset:version
+
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add .
+          if git diff --staged --quiet; then
+            echo "No version changes to commit"
+          else
+            git commit -m "chore: version packages [skip ci]"
+            git push origin main
+          fi
+
+      - name: Publish to NPM
+        run: |
+          echo "🚀 Publishing to NPM..."
+          yarn changeset:publish
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Create GitHub Release
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          TAG="v$VERSION"
+
+          CHANGELOG=$(awk "/^## $VERSION/,/^## /" CHANGELOG.md | sed '1d;$d')
+
+          gh release create "$TAG" \
+            --title "@kubit-ui-web/eslint-plugin-kubit v$VERSION" \
+            --notes "$CHANGELOG" \
+            --target main || echo "⚠️ Release already exists or could not be created"
+        env:
+          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN || secrets.GITHUB_TOKEN }}
+
+      - name: Comment on associated PR
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const bumpType = '${{ steps.detect.outputs.bump_type }}';
+            const fs = require('fs');
+            const packageJson = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+            const version = packageJson.version;
+            const npmLink = `https://www.npmjs.com/package/@kubit-ui-web/eslint-plugin-kubit/v/${version}`;
+
+            // Find associated PR for this commit
+            const { data: prs } = await github.rest.repos.listPullRequestsAssociatedWithCommit({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              commit_sha: '${{ github.sha }}'
+            });
+
+            const mergedPr = prs.find(pr => pr.merged_at);
+            if (!mergedPr) {
+              core.info('No associated PR found (direct push), skipping comment');
+              return;
+            }
+
+            let comment = '## 🚀 Package Published\n\n';
+            comment += `**Version bump type:** \`${bumpType}\`\n\n`;
+            comment += '| Package | Version | NPM Link |\n';
+            comment += '|---------|---------|----------|\n';
+            comment += `| @kubit-ui-web/eslint-plugin-kubit | \`${version}\` | [View on NPM](${npmLink}) |\n`;
+            comment += '\n✅ Package has been successfully published to NPM!';
+
+            github.rest.issues.createComment({
+              issue_number: mergedPr.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
