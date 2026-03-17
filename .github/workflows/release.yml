@@ -12,20 +12,22 @@ name: Release Production with Changesets
 # 2. RELEASE_TOKEN: GitHub PAT with bypass permissions
 
 on:
-  push:
+  pull_request:
+    types: [closed]
     branches:
       - main
+      - master
 
 permissions:
   contents: write
   pull-requests: write
   packages: write
   actions: read
-  id-token: write
+  id-token: write # Required for NPM provenance
 
 jobs:
   auto-release:
-    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
 
     steps:
@@ -44,10 +46,27 @@ jobs:
       - name: Enable Corepack
         run: corepack enable
 
+      - name: Get Yarn cache directory
+        id: yarn-cache
+        shell: bash
+        run: |
+          echo "CACHE_DIR=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
+
+      - name: Setup Yarn cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.yarn-cache.outputs.CACHE_DIR }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
       - name: Install dependencies
         run: |
+          echo "Installing dependencies with yarn..."
           yarn --version
           yarn install --immutable
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Run tests
         run: yarn test
@@ -55,40 +74,48 @@ jobs:
       - name: Detect version bump type from commits
         id: detect
         run: |
-          COMMIT_MSG="${{ github.event.head_commit.message }}"
-          echo "📝 Commit: $COMMIT_MSG"
+          BASE_REF="origin/${{ github.event.pull_request.base.ref }}"
 
+          echo "📝 Analyzing commits in this PR..."
+
+          # Get all commit messages in the PR
+          COMMITS=$(git log --pretty=format:"%s" $BASE_REF..HEAD)
+          echo "Commits:"
+          echo "$COMMITS"
+          echo ""
+
+          # Detect version bump type from commits
           BUMP_TYPE="patch"
-          if [[ "$COMMIT_MSG" =~ ^(break|breaking|feat!) ]] || [[ "$COMMIT_MSG" =~ BREAKING\ CHANGE ]]; then
+          HAS_FEAT=false
+          HAS_BREAKING=false
+
+          while IFS= read -r commit; do
+            if [[ "$commit" =~ ^(break|breaking|feat!) ]] || [[ "$commit" =~ BREAKING\ CHANGE ]]; then
+              HAS_BREAKING=true
+            elif [[ "$commit" =~ ^feat ]]; then
+              HAS_FEAT=true
+            fi
+          done <<< "$COMMITS"
+
+          if [ "$HAS_BREAKING" = true ]; then
             BUMP_TYPE="major"
-          elif [[ "$COMMIT_MSG" =~ ^feat ]]; then
+          elif [ "$HAS_FEAT" = true ]; then
             BUMP_TYPE="minor"
           fi
 
           echo "bump_type=$BUMP_TYPE" >> $GITHUB_OUTPUT
           echo "📦 Version bump type: $BUMP_TYPE"
 
-      - name: Check for existing changesets
-        id: check-changesets
-        run: |
-          CHANGESET_FILES=$(find .changeset -maxdepth 1 -name '*.md' ! -name 'README.md' 2>/dev/null || true)
-          if [ -n "$CHANGESET_FILES" ]; then
-            echo "has_changeset=true" >> $GITHUB_OUTPUT
-            echo "✅ Found pending changeset(s):"
-            echo "$CHANGESET_FILES"
-          else
-            echo "has_changeset=false" >> $GITHUB_OUTPUT
-            echo "⚠️ No changeset found, will create automatically"
-          fi
-
       - name: Create changeset
-        if: steps.check-changesets.outputs.has_changeset == 'false'
         run: |
           BUMP_TYPE="${{ steps.detect.outputs.bump_type }}"
-          COMMIT_MSG="${{ github.event.head_commit.message }}"
+          PR_TITLE="${{ github.event.pull_request.title }}"
+          PR_NUMBER="${{ github.event.pull_request.number }}"
 
-          SUMMARY=$(echo "$COMMIT_MSG" | head -n 1 | sed -E 's/^(feat|fix|docs|style|refactor|perf|test|chore|build|ci|break|breaking)(\([^)]+\))?!?:\s*//')
+          # Clean PR title for changeset summary
+          SUMMARY=$(echo "$PR_TITLE" | sed -E 's/^(feat|fix|docs|style|refactor|perf|test|chore|build|ci|break|breaking)(\([^)]+\))?!?:\s*//')
 
+          # Create changeset file
           CHANGESET_ID=$(date +%s)
           CHANGESET_FILE=".changeset/auto-$CHANGESET_ID.md"
 
@@ -97,6 +124,8 @@ jobs:
           echo "---" >> $CHANGESET_FILE
           echo "" >> $CHANGESET_FILE
           echo "$SUMMARY" >> $CHANGESET_FILE
+          echo "" >> $CHANGESET_FILE
+          echo "PR: #$PR_NUMBER" >> $CHANGESET_FILE
 
           echo "✅ Created changeset:"
           cat $CHANGESET_FILE
@@ -106,9 +135,11 @@ jobs:
           echo "📦 Updating version and changelog..."
           yarn changeset:version
 
+          # Configure git
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
+          # Commit version changes
           git add .
           if git diff --staged --quiet; then
             echo "No version changes to commit"
@@ -127,19 +158,22 @@ jobs:
 
       - name: Create GitHub Release
         run: |
+          # Get version from package.json
           VERSION=$(node -p "require('./package.json').version")
           TAG="v$VERSION"
 
+          # Extract changelog for this version
           CHANGELOG=$(awk "/^## $VERSION/,/^## /" CHANGELOG.md | sed '1d;$d')
 
+          # Create release
           gh release create "$TAG" \
             --title "@kubit-ui-web/eslint-plugin-kubit v$VERSION" \
             --notes "$CHANGELOG" \
-            --target main || echo "⚠️ Release already exists or could not be created"
+            --target main
         env:
           GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN || secrets.GITHUB_TOKEN }}
 
-      - name: Comment on associated PR
+      - name: Comment on PR
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -150,19 +184,6 @@ jobs:
             const version = packageJson.version;
             const npmLink = `https://www.npmjs.com/package/@kubit-ui-web/eslint-plugin-kubit/v/${version}`;
 
-            // Find associated PR for this commit
-            const { data: prs } = await github.rest.repos.listPullRequestsAssociatedWithCommit({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              commit_sha: '${{ github.sha }}'
-            });
-
-            const mergedPr = prs.find(pr => pr.merged_at);
-            if (!mergedPr) {
-              core.info('No associated PR found (direct push), skipping comment');
-              return;
-            }
-
             let comment = '## 🚀 Package Published\n\n';
             comment += `**Version bump type:** \`${bumpType}\`\n\n`;
             comment += '| Package | Version | NPM Link |\n';
@@ -171,7 +192,7 @@ jobs:
             comment += '\n✅ Package has been successfully published to NPM!';
 
             github.rest.issues.createComment({
-              issue_number: mergedPr.number,
+              issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
               body: comment
