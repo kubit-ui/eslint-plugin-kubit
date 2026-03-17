@@ -1,13 +1,9 @@
 # Dependencies
 node_modules/
 
-# Lock files (keep pnpm-lock.yaml)
-yarn.lock
+# Lock files (keep yarn.lock)
 package-lock.json
-
-# pnpm
-.pnpm-store/
-.pnpm-debug.log
+pnpm-lock.yaml
 
 # Logs
 *.log
@@ -36,4 +32,3 @@ Thumbs.db
 
 # Package files
 *.tgz
-.npmrc
