@@ -1,5 +1,14 @@
 # @kubit-ui-web/eslint-plugin-kubit
 
+## 0.0.7
+
+### Patch Changes
+
+- b4cd4a0: fix(ci): add typescript as devDependency and fix PR validation workflow
+
+  - Added `typescript` to devDependencies to resolve `Cannot find module 'typescript'` errors in CI
+  - Fixed `changeset status` by fetching `main` branch with full history in PR validation workflow
+
 ## 0.0.6
 
 ### Fixes
