@@ -1,5 +1,13 @@
 # @kubit-ui-web/eslint-plugin-kubit
 
+## 0.1.0
+
+### Minor Changes
+
+- delete eslint rule
+
+  PR: #push-bba27beda6bff3727b079fcaf049b10f370f49a0
+
 ## 0.0.9
 
 ### Patch Changes
